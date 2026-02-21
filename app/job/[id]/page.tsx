@@ -102,11 +102,11 @@ export default function JobDetailsPage() {
       <main className="flex-1 bg-background">
         <section className="border-b border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-6">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Badge variant={getStatusColor(jobStatus)} className="text-xs font-mono">{jobStatus.toUpperCase()}</Badge>
-                  <span className="text-xs font-mono text-muted-foreground">{jobId}</span>
+                  <span className="text-xs font-mono text-muted-foreground break-all">{jobId}</span>
                 </div>
                 <h1 className="text-2xl font-mono font-semibold">{jobName}</h1>
               </div>
@@ -115,7 +115,7 @@ export default function JobDetailsPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-4 gap-px bg-border">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border">
               <div className="bg-card p-4">
                 <p className="text-xs font-mono text-muted-foreground mb-1">RUNTIME</p>
                 <p className="text-lg font-mono font-semibold">{runtime > 0 ? formatDuration(runtime) : '--'}</p>

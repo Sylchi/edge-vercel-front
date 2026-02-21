@@ -40,7 +40,7 @@ export default function TokenPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
-              <h1 className="text-4xl font-bold">EDGE Token</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold">EDGE Token</h1>
               <Badge className="ml-2">Live</Badge>
             </div>
             
@@ -144,12 +144,12 @@ export default function TokenPage() {
         <section className="py-12 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Tabs defaultValue="staking" className="space-y-8">
-              <TabsList className="grid w-full grid-cols-5 max-w-3xl mx-auto">
-                <TabsTrigger value="staking">Staking</TabsTrigger>
-                <TabsTrigger value="transactions">Transactions</TabsTrigger>
-                <TabsTrigger value="rewards">Rewards</TabsTrigger>
-                <TabsTrigger value="disputes">Disputes</TabsTrigger>
-                <TabsTrigger value="slashing">Slashing</TabsTrigger>
+              <TabsList className="w-full max-w-3xl mx-auto flex overflow-x-auto md:grid md:grid-cols-5">
+                <TabsTrigger value="staking" className="shrink-0">Staking</TabsTrigger>
+                <TabsTrigger value="transactions" className="shrink-0">Transactions</TabsTrigger>
+                <TabsTrigger value="rewards" className="shrink-0">Rewards</TabsTrigger>
+                <TabsTrigger value="disputes" className="shrink-0">Disputes</TabsTrigger>
+                <TabsTrigger value="slashing" className="shrink-0">Slashing</TabsTrigger>
               </TabsList>
 
               {/* Staking Pools */}

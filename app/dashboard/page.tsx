@@ -219,7 +219,7 @@ export default function DashboardPage() {
                             <p className="text-sm font-mono text-muted-foreground">{job.id}</p>
                           </div>
 
-                          <div className="grid grid-cols-3 gap-6">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
                             <div>
                               <p className="text-xs text-muted-foreground mb-1">Runtime</p>
                               <p className="text-sm font-semibold">{job.runtime > 0 ? formatDuration(job.runtime) : '--'}</p>

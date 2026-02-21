@@ -10,7 +10,39 @@ export function DocsSidebar() {
   const pathname = usePathname()
   
   return (
-    <aside className="w-64 flex-shrink-0 border-r border-border bg-card">
+    <>
+      <div className="md:hidden border-b border-border bg-card px-4 py-3">
+        <nav className="space-y-3">
+          {docsSections.map((section) => (
+            <div key={`mobile-${section.slug}`}>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                {section.title}
+              </p>
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {section.pages.map((page) => {
+                  const href = `/docs/${section.slug}/${page.slug}`
+                  const isActive = pathname === href
+                  return (
+                    <Link
+                      key={`mobile-${page.slug}`}
+                      href={href}
+                      className={`whitespace-nowrap text-xs py-1.5 px-2.5 rounded-md border transition-colors ${
+                        isActive
+                          ? 'bg-primary/10 text-primary border-primary/30'
+                          : 'text-muted-foreground border-border hover:text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      {page.title}
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+      </div>
+
+      <aside className="hidden md:block w-64 flex-shrink-0 border-r border-border bg-card">
       <div className="sticky top-16 p-6 h-[calc(100vh-4rem)] overflow-y-auto">
         <nav className="space-y-6">
           {docsSections.map((section) => (
@@ -50,6 +82,7 @@ export function DocsSidebar() {
           ))}
         </nav>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }

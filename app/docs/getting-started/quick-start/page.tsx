@@ -18,10 +18,10 @@ export default function QuickStartPage() {
         <DocsSidebar />
 
         <main className="flex-1 bg-background">
-          <article className="max-w-4xl mx-auto px-8 py-12">
+          <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
-                <h1 className="text-4xl font-bold">Quick Start</h1>
+                <h1 className="text-3xl sm:text-4xl font-bold">Quick Start</h1>
                 <Badge variant="secondary" className="uppercase tracking-wide text-[10px]">
                   Live
                 </Badge>

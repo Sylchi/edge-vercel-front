@@ -8,8 +8,8 @@ const footerLinks = {
     { href: '/docs', label: 'Documentation' }
   ],
   resources: [
-    { href: '/docs/getting-started', label: 'Getting Started' },
-    { href: '/docs/api-reference', label: 'API Reference' },
+    { href: '/docs/getting-started/quick-start', label: 'Getting Started' },
+    { href: '/docs/api-reference/rest-api', label: 'API Reference' },
     { href: '/blog', label: 'Blog' },
     { href: '/style-guide', label: 'Style Guide' }
   ],
