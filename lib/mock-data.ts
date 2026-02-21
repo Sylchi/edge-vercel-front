@@ -1,4 +1,4 @@
-import type { Job, Worker, TimelineEvent, DashboardStats, BlogPost, Author, DocSection, LegalPage } from './types'
+import type { Job, Worker, TimelineEvent, DashboardStats, BlogPost, Author, DocSection, LegalPage, TokenStats, StakingPool, Transaction, Dispute, SlashingEvent, RewardClaim } from './types'
 
 // Mock Authors
 export const mockAuthors: Author[] = [
@@ -465,3 +465,217 @@ export const mockSLA: LegalPage = {
     }
   ]
 }
+
+// Token Economics Data
+
+export const mockTokenStats: TokenStats = {
+  totalSupply: 1000000000,
+  circulatingSupply: 450000000,
+  price: 0.15,
+  marketCap: 67500000,
+  volume24h: 3240000,
+  totalStaked: 285000000,
+  stakingAPY: 12.4
+}
+
+export const mockStakingPools: StakingPool[] = [
+  {
+    id: 'pool_workers',
+    name: 'Worker Nodes',
+    totalStaked: 185000000,
+    apy: 15.2,
+    minStake: 50,
+    lockPeriod: 0,
+    participants: 1247,
+    yourStake: 100,
+    rewards: 2.34
+  },
+  {
+    id: 'pool_liquidity',
+    name: 'Liquidity Pool',
+    totalStaked: 75000000,
+    apy: 18.5,
+    minStake: 10,
+    lockPeriod: 30,
+    participants: 3421,
+    yourStake: 25,
+    rewards: 0.89
+  },
+  {
+    id: 'pool_governance',
+    name: 'Governance Staking',
+    totalStaked: 25000000,
+    apy: 8.3,
+    minStake: 100,
+    lockPeriod: 90,
+    participants: 456
+  }
+]
+
+export const mockTransactions: Transaction[] = [
+  {
+    id: 'tx_001',
+    type: 'reward',
+    amount: 2.34,
+    to: 'your_wallet',
+    timestamp: '2024-02-20T10:30:00Z',
+    status: 'confirmed',
+    txHash: '5nK2xV7qW5eU8fA3gB6hC9rD1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF',
+    description: 'Staking rewards claimed from Worker Nodes pool'
+  },
+  {
+    id: 'tx_002',
+    type: 'stake',
+    amount: 50,
+    from: 'your_wallet',
+    timestamp: '2024-02-19T14:22:00Z',
+    status: 'confirmed',
+    txHash: '7qW5eU8fA3gB6hC9rD1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV',
+    description: 'Staked to Worker Nodes pool'
+  },
+  {
+    id: 'tx_003',
+    type: 'payment',
+    amount: 0.125,
+    from: 'your_wallet',
+    timestamp: '2024-02-19T11:15:00Z',
+    status: 'confirmed',
+    txHash: '9rD1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA3gB6hC',
+    description: 'Payment for job: Image Processing Pipeline'
+  },
+  {
+    id: 'tx_004',
+    type: 'slash',
+    amount: 5.0,
+    from: 'worker_045',
+    timestamp: '2024-02-18T16:45:00Z',
+    status: 'confirmed',
+    txHash: '1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA3gB6hC9rD',
+    description: 'Worker slashed for incorrect output'
+  },
+  {
+    id: 'tx_005',
+    type: 'unstake',
+    amount: 25,
+    to: 'your_wallet',
+    timestamp: '2024-02-17T09:30:00Z',
+    status: 'pending',
+    txHash: '3gB6hC9rD1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA',
+    description: 'Unstaking from Liquidity Pool (7 days remaining)'
+  }
+]
+
+export const mockDisputes: Dispute[] = [
+  {
+    id: 'dispute_001',
+    jobId: 'job_5f6g7h8i',
+    jobName: 'Financial Calculation',
+    initiator: 'user_abc123',
+    defendant: 'worker_067',
+    reason: 'Output hash mismatch with majority consensus',
+    amount: 15.5,
+    status: 'voting',
+    createdAt: '2024-02-20T08:15:00Z',
+    votes: {
+      for: 124,
+      against: 45,
+      required: 200
+    }
+  },
+  {
+    id: 'dispute_002',
+    jobId: 'job_6g7h8i9j',
+    jobName: 'Data Verification',
+    initiator: 'worker_089',
+    defendant: 'user_def456',
+    reason: 'Job submission contained malformed WASM',
+    amount: 2.5,
+    status: 'open',
+    createdAt: '2024-02-20T11:20:00Z'
+  },
+  {
+    id: 'dispute_003',
+    jobId: 'job_4e5f6g7h',
+    jobName: 'ML Inference',
+    initiator: 'user_ghi789',
+    defendant: 'worker_034',
+    reason: 'Worker failed to execute within timeout',
+    amount: 8.0,
+    status: 'resolved',
+    createdAt: '2024-02-18T14:30:00Z',
+    resolvedAt: '2024-02-19T16:45:00Z',
+    votes: {
+      for: 287,
+      against: 54,
+      required: 200
+    }
+  }
+]
+
+export const mockSlashingEvents: SlashingEvent[] = [
+  {
+    id: 'slash_001',
+    workerId: 'worker_045',
+    workerName: 'node-eu-west-045',
+    reason: 'Output hash disagreement with consensus',
+    amount: 5.0,
+    timestamp: '2024-02-18T16:45:00Z',
+    txHash: '1sE4tF7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA3gB6hC9rD',
+    jobId: 'job_7h8i9j0k'
+  },
+  {
+    id: 'slash_002',
+    workerId: 'worker_067',
+    workerName: 'node-us-east-067',
+    reason: 'Repeated execution timeouts',
+    amount: 12.5,
+    timestamp: '2024-02-17T10:22:00Z',
+    txHash: '7y8mK2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA3gB6hC9rD1sE4tF'
+  },
+  {
+    id: 'slash_003',
+    workerId: 'worker_089',
+    workerName: 'node-ap-north-089',
+    reason: 'Byzantine behavior detected',
+    amount: 25.0,
+    timestamp: '2024-02-15T08:10:00Z',
+    txHash: '2xV7qW5eU8fA3gB6hC9rD1sE4tF5nK2xV7qW5eU8fA3gB6hC9rD1sE4tF7y8mK',
+    jobId: 'job_8i9j0k1l'
+  }
+]
+
+export const mockRewardClaims: RewardClaim[] = [
+  {
+    id: 'reward_001',
+    amount: 2.34,
+    source: 'staking',
+    earned: '2024-02-01 - 2024-02-20',
+    claimable: true,
+    claimed: false
+  },
+  {
+    id: 'reward_002',
+    amount: 1.87,
+    source: 'compute',
+    earned: '2024-02-01 - 2024-02-20',
+    claimable: true,
+    claimed: false
+  },
+  {
+    id: 'reward_003',
+    amount: 0.45,
+    source: 'referral',
+    earned: '2024-02-15 - 2024-02-20',
+    claimable: true,
+    claimed: false
+  },
+  {
+    id: 'reward_004',
+    amount: 3.12,
+    source: 'staking',
+    earned: '2024-01-01 - 2024-01-31',
+    claimable: false,
+    claimed: true,
+    claimedAt: '2024-02-01T10:00:00Z'
+  }
+]

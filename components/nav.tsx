@@ -8,6 +8,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/run', label: 'Run Job' },
   { href: '/workers', label: 'Workers' },
+  { href: '/token', label: 'Token' },
   { href: '/docs', label: 'Docs' },
   { href: '/blog', label: 'Blog' }
 ]

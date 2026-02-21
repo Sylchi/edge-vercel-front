@@ -153,3 +153,78 @@ export interface WorkerSlashedEmailProps extends EmailProps {
 export interface WelcomeEmailProps extends EmailProps {
   userName: string
 }
+
+// Token & Economics Types
+
+export interface TokenStats {
+  totalSupply: number
+  circulatingSupply: number
+  price: number // USD
+  marketCap: number
+  volume24h: number
+  totalStaked: number
+  stakingAPY: number
+}
+
+export interface StakingPool {
+  id: string
+  name: string
+  totalStaked: number
+  apy: number
+  minStake: number
+  lockPeriod: number // days
+  participants: number
+  yourStake?: number
+  rewards?: number
+}
+
+export interface Transaction {
+  id: string
+  type: 'stake' | 'unstake' | 'reward' | 'slash' | 'payment' | 'dispute'
+  amount: number
+  from?: string
+  to?: string
+  timestamp: string
+  status: 'confirmed' | 'pending' | 'failed'
+  txHash: string
+  description: string
+}
+
+export interface Dispute {
+  id: string
+  jobId: string
+  jobName: string
+  initiator: string
+  defendant: string
+  reason: string
+  amount: number // stake at risk
+  status: 'open' | 'voting' | 'resolved' | 'rejected'
+  createdAt: string
+  resolvedAt?: string
+  votes?: {
+    for: number
+    against: number
+    required: number
+  }
+}
+
+export interface SlashingEvent {
+  id: string
+  workerId: string
+  workerName: string
+  reason: string
+  amount: number
+  timestamp: string
+  txHash: string
+  jobId?: string
+}
+
+export interface RewardClaim {
+  id: string
+  amount: number
+  source: 'staking' | 'compute' | 'referral'
+  earned: string
+  claimable: boolean
+  claimed: boolean
+  claimedAt?: string
+}
