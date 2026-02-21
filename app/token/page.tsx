@@ -110,6 +110,29 @@ export default function TokenPage() {
                 View Governance
               </Button>
             </div>
+
+            <Card className="mt-8 border-primary/30 bg-card/80 backdrop-blur-sm">
+              <CardContent className="p-6">
+                <p className="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-3">
+                  Reference
+                </p>
+                <blockquote className="text-lg md:text-xl font-medium leading-relaxed text-balance">
+                  "I think compute will be the currency of the future. I think it'll be maybe the most precious commodity in the world."
+                </blockquote>
+                <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                  <span>Sam Altman on the Lex Fridman Podcast</span>
+                  <a
+                    href="https://www.youtube.com/watch?v=jvqFAi7vkBc&t=2s"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
+                    Watch source
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
