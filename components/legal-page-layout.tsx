@@ -54,3 +54,5 @@ export function LegalSection({ title, children }: LegalSectionProps) {
     </section>
   )
 }
+
+export default LegalPageLayout

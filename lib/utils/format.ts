@@ -42,6 +42,18 @@ export function formatSOL(amount: number, decimals: number = 4): string {
 }
 
 /**
+ * Format USD amount with locale-aware separators
+ */
+export function formatUSD(amount: number, decimals: number = 2): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }).format(amount)
+}
+
+/**
  * Format gas units
  */
 export function formatGas(gas: number): string {
