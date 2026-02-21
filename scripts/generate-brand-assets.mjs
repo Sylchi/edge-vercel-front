@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -113,13 +113,50 @@ function magick(args) {
   execFileSync('magick', args, { stdio: 'inherit' })
 }
 
-magick([iconLightTemp, '-resize', '32x32', path.join(publicDir, 'icon-light-32x32.png')])
-magick([iconDarkTemp, '-resize', '32x32', path.join(publicDir, 'icon-dark-32x32.png')])
-magick([iconLightTemp, '-resize', '180x180', path.join(publicDir, 'apple-icon.png')])
-magick([iconLightTemp, '-resize', '192x192', path.join(publicDir, 'icon-192.png')])
-magick([iconDarkTemp, '-resize', '512x512', path.join(publicDir, 'icon-512.png')])
-magick([path.join(publicDir, 'icon-light-32x32.png'), path.join(publicDir, 'favicon.ico')])
-magick([path.join(brandDir, 'edgerun-logo.svg'), '-resize', '256x144', path.join(publicDir, 'placeholder-logo.png')])
+function pngResize(input, size, output) {
+  magick([
+    input,
+    '-strip',
+    '-filter',
+    'Lanczos',
+    '-resize',
+    size,
+    '-define',
+    'png:compression-level=9',
+    '-define',
+    'png:compression-filter=5',
+    '-define',
+    'png:compression-strategy=1',
+    output
+  ])
+}
+
+function hasMagick() {
+  const probe = spawnSync('magick', ['-version'], { stdio: 'ignore' })
+  return probe.status === 0
+}
+
+if (hasMagick()) {
+  pngResize(iconLightTemp, '32x32', path.join(publicDir, 'icon-light-32x32.png'))
+  pngResize(iconDarkTemp, '32x32', path.join(publicDir, 'icon-dark-32x32.png'))
+  pngResize(iconLightTemp, '180x180', path.join(publicDir, 'apple-icon.png'))
+  pngResize(iconLightTemp, '192x192', path.join(publicDir, 'icon-192.png'))
+  pngResize(iconDarkTemp, '512x512', path.join(publicDir, 'icon-512.png'))
+
+  magick([
+    iconLightTemp,
+    '-strip',
+    '-define',
+    'icon:auto-resize=16,24,32,48',
+    path.join(publicDir, 'favicon.ico')
+  ])
+
+  pngResize(path.join(brandDir, 'edgerun-logo.svg'), '256x144', path.join(publicDir, 'placeholder-logo.png'))
+} else {
+  console.warn(
+    '[brand:generate] ImageMagick (magick) not found; keeping existing raster assets in public/.'
+  )
+}
 rmSync(iconLightTemp, { force: true })
 rmSync(iconDarkTemp, { force: true })
 
