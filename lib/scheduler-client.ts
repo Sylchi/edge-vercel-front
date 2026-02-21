@@ -9,6 +9,9 @@ export interface JobCreateRequest {
   input_base64: string
   limits: SchedulerLimits
   escrow_lamports: number
+  client_pubkey?: string
+  client_signed_at_unix_s?: number
+  client_signature?: string
 }
 
 export interface JobCreateResponse {

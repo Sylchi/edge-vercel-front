@@ -2,17 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { GeneratingIndicator } from '@/components/ui/generating-indicator'
-import { mockJobs, mockDashboardStats } from '@/lib/mock-data'
 import { fetchSchedulerJobStatus } from '@/lib/scheduler-client'
 import { readSubmittedJobs } from '@/lib/submitted-jobs'
 import { formatDuration, formatSOL, formatPercentage, formatRelativeTime, getStatusColor } from '@/lib/utils/format'
 import type { DashboardStats, Job, JobStatus } from '@/lib/types'
+import { WalletButton } from '@/components/solana/wallet-button'
 
 function deriveJobStatusFromScheduler(payload: Awaited<ReturnType<typeof fetchSchedulerJobStatus>>): JobStatus {
   if (payload.quorum?.quorum_reached) {
@@ -28,17 +28,29 @@ function deriveJobStatusFromScheduler(payload: Awaited<ReturnType<typeof fetchSc
 }
 
 export default function DashboardPage() {
-  const [recentJobs, setRecentJobs] = useState<Job[]>(mockJobs.slice(0, 5))
+  const { connection } = useConnection()
+  const { connected, publicKey } = useWallet()
+  const walletAddress = publicKey?.toBase58() ?? null
+  const [recentJobs, setRecentJobs] = useState<Job[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [balanceLamports, setBalanceLamports] = useState<number | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
     async function loadJobs() {
-      const submitted = readSubmittedJobs()
+      if (!walletAddress) {
+        if (!cancelled) {
+          setRecentJobs([])
+          setIsLoading(false)
+        }
+        return
+      }
+
+      const submitted = readSubmittedJobs(walletAddress)
       if (submitted.length === 0) {
         if (!cancelled) {
-          setRecentJobs(mockJobs.slice(0, 5))
+          setRecentJobs([])
           setIsLoading(false)
         }
         return
@@ -94,20 +106,49 @@ export default function DashboardPage() {
       }
     }
 
-    loadJobs()
+    void loadJobs()
 
-    const intervalId = window.setInterval(loadJobs, 5000)
+    const intervalId = window.setInterval(() => {
+      void loadJobs()
+    }, 5000)
     return () => {
       cancelled = true
       window.clearInterval(intervalId)
     }
-  }, [])
+  }, [walletAddress])
 
-  const stats: DashboardStats = useMemo(() => {
-    if (recentJobs.length === 0 || recentJobs[0].id.startsWith('job_')) {
-      return mockDashboardStats
+  useEffect(() => {
+    let cancelled = false
+
+    async function loadBalance() {
+      if (!publicKey) {
+        setBalanceLamports(null)
+        return
+      }
+      try {
+        const lamports = await connection.getBalance(publicKey, 'confirmed')
+        if (!cancelled) {
+          setBalanceLamports(lamports)
+        }
+      } catch {
+        if (!cancelled) {
+          setBalanceLamports(null)
+        }
+      }
     }
 
+    void loadBalance()
+    const intervalId = window.setInterval(() => {
+      void loadBalance()
+    }, 10000)
+
+    return () => {
+      cancelled = true
+      window.clearInterval(intervalId)
+    }
+  }, [connection, publicKey])
+
+  const stats: DashboardStats = useMemo(() => {
     const completed = recentJobs.filter((job) => job.status === 'completed').length
     const active = recentJobs.filter((job) => job.status === 'running' || job.status === 'pending').length
     const successRate = recentJobs.length > 0 ? (completed / recentJobs.length) * 100 : 0
@@ -134,10 +175,7 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
                 <p className="text-muted-foreground">Monitor your compute jobs and spending</p>
               </div>
-              <Button disabled className="grayscale opacity-60 cursor-not-allowed">
-                Connect Wallet
-                <GeneratingIndicator className="text-[9px]" />
-              </Button>
+              <WalletButton />
             </div>
 
             <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">
@@ -145,15 +183,18 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Wallet</p>
-                    <p className="font-mono text-lg">Not Connected</p>
+                    <p className="font-mono text-lg">{walletAddress ?? 'Not Connected'}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground mb-1">Balance</p>
-                    <p className="text-2xl font-bold">--</p>
+                    <p className="text-2xl font-bold">{balanceLamports == null ? '--' : formatSOL(balanceLamports / 1_000_000_000)}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
+            {!connected && (
+              <p className="text-sm text-muted-foreground mt-3">Connect your wallet to load your jobs and balances.</p>
+            )}
           </div>
         </section>
 
@@ -206,7 +247,9 @@ export default function DashboardPage() {
                       <div className="p-6 text-sm text-muted-foreground">Loading jobs...</div>
                     )}
                     {!isLoading && recentJobs.length === 0 && (
-                      <div className="p-6 text-sm text-muted-foreground">No jobs found. Submit one from Run page.</div>
+                      <div className="p-6 text-sm text-muted-foreground">
+                        {connected ? 'No jobs found for this wallet. Submit one from Run page.' : 'Connect wallet to view your jobs.'}
+                      </div>
                     )}
                     {recentJobs.map((job) => (
                       <Link key={job.id} href={`/job/${job.id}`} className="block p-6 hover:bg-muted/50 transition-colors">

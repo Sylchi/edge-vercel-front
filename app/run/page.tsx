@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,8 @@ import { Badge } from '@/components/ui/badge'
 import { formatSOL, formatGas } from '@/lib/utils/format'
 import { createSchedulerJob } from '@/lib/scheduler-client'
 import { writeSubmittedJob } from '@/lib/submitted-jobs'
+import { WalletButton } from '@/components/solana/wallet-button'
+import { decodeSchedulerTransaction, signJobCreateRequest } from '@/lib/solana'
 
 const DEFAULT_RUNTIME_ID =
   process.env.NEXT_PUBLIC_EDGERUN_DEFAULT_RUNTIME_ID ??
@@ -29,11 +32,6 @@ function bytesToBase64(bytes: Uint8Array): string {
   return btoa(binary)
 }
 
-async function fileToBase64(file: File): Promise<string> {
-  const buffer = await file.arrayBuffer()
-  return bytesToBase64(new Uint8Array(buffer))
-}
-
 function parseWorkerCount(raw: string): number {
   const parsed = Number.parseInt(raw, 10)
   if (Number.isNaN(parsed)) {
@@ -44,6 +42,8 @@ function parseWorkerCount(raw: string): number {
 
 export default function RunJobPage() {
   const router = useRouter()
+  const { connection } = useConnection()
+  const { connected, publicKey, signMessage, sendTransaction } = useWallet()
 
   const [jobName, setJobName] = useState('')
   const [wasmFile, setWasmFile] = useState<File | null>(null)
@@ -52,6 +52,7 @@ export default function RunJobPage() {
   const [runtimeId, setRuntimeId] = useState(DEFAULT_RUNTIME_ID)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [chainSig, setChainSig] = useState<string | null>(null)
 
   const workerCountNum = parseWorkerCount(workerCount)
   const estimatedGas = useMemo(() => {
@@ -69,6 +70,10 @@ export default function RunJobPage() {
       setSubmitError('A WASM module is required.')
       return
     }
+    if (!connected || !publicKey || !signMessage) {
+      setSubmitError('Connect a wallet that supports message signing to submit jobs.')
+      return
+    }
 
     const normalizedRuntimeId = runtimeId.trim().toLowerCase()
     if (!/^[0-9a-f]{64}$/.test(normalizedRuntimeId)) {
@@ -78,10 +83,28 @@ export default function RunJobPage() {
 
     setIsSubmitting(true)
     setSubmitError(null)
+    setChainSig(null)
 
     try {
-      const wasmBase64 = await fileToBase64(wasmFile)
-      const inputBase64 = inputFile ? await fileToBase64(inputFile) : ''
+      const wasmBytes = new Uint8Array(await wasmFile.arrayBuffer())
+      const inputBytes = inputFile ? new Uint8Array(await inputFile.arrayBuffer()) : new Uint8Array()
+      const wasmBase64 = bytesToBase64(wasmBytes)
+      const inputBase64 = bytesToBase64(inputBytes)
+      const escrowLamports = Math.max(1, Math.round(estimatedCost * LAMPORTS_PER_SOL))
+      const signedAtUnixS = Math.floor(Date.now() / 1000)
+      const walletAuth = await signJobCreateRequest(
+        {
+          clientPubkey: publicKey.toBase58(),
+          runtimeId: normalizedRuntimeId,
+          maxMemoryBytes: DEFAULT_MAX_MEMORY_BYTES,
+          maxInstructions: DEFAULT_MAX_INSTRUCTIONS,
+          escrowLamports,
+          wasmBytes,
+          inputBytes,
+          signedAtUnixS
+        },
+        signMessage
+      )
 
       const response = await createSchedulerJob({
         runtime_id: normalizedRuntimeId,
@@ -91,13 +114,28 @@ export default function RunJobPage() {
           max_memory_bytes: DEFAULT_MAX_MEMORY_BYTES,
           max_instructions: DEFAULT_MAX_INSTRUCTIONS
         },
-        escrow_lamports: Math.max(1, Math.round(estimatedCost * LAMPORTS_PER_SOL))
+        escrow_lamports: escrowLamports,
+        ...walletAuth
       })
+
+      const postTx = response.post_job_tx
+      if (postTx && !postTx.startsWith('UNAVAILABLE_')) {
+        const tx = decodeSchedulerTransaction(postTx)
+        const requiresWalletSignature = tx.signatures.some((entry) => entry.publicKey.equals(publicKey))
+        if (requiresWalletSignature) {
+          const sig = await sendTransaction(tx, connection, {
+            skipPreflight: false,
+            preflightCommitment: 'processed'
+          })
+          setChainSig(sig)
+        }
+      }
 
       writeSubmittedJob({
         id: response.job_id,
         name: jobName || wasmFile.name,
         createdAt: new Date().toISOString(),
+        ownerPubkey: publicKey.toBase58(),
         wasmFileName: wasmFile.name,
         wasmSize: wasmFile.size,
         inputFileName: inputFile?.name,
@@ -123,6 +161,9 @@ export default function RunJobPage() {
             <p className="text-sm text-muted-foreground font-mono">
               Submits directly to scheduler API at {process.env.NEXT_PUBLIC_EDGERUN_SCHEDULER_URL ?? 'http://127.0.0.1:8080'}
             </p>
+            <div className="mt-4">
+              <WalletButton />
+            </div>
           </div>
         </section>
 
@@ -205,8 +246,14 @@ export default function RunJobPage() {
                     {submitError && (
                       <p className="text-sm text-destructive">{submitError}</p>
                     )}
+                    {!submitError && chainSig && (
+                      <p className="text-sm text-primary font-mono break-all">Posted on-chain: {chainSig}</p>
+                    )}
+                    {!connected && (
+                      <p className="text-sm text-muted-foreground">Connect wallet to enable submission.</p>
+                    )}
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || !wasmFile}>
+                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || !wasmFile || !connected}>
                       {isSubmitting ? 'Submitting...' : 'Submit Job'}
                     </Button>
                   </form>

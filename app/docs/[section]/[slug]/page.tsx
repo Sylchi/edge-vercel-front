@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { DocsSidebar } from '@/components/docs/docs-sidebar'
@@ -17,10 +16,11 @@ export default async function DocsDetailPage({
   params: Promise<{ section: string; slug: string }>
 }) {
   const { section, slug } = await params
-  const page = getDocsPage(section, slug)
-
-  if (!page) {
-    notFound()
+  const page = getDocsPage(section, slug) ?? {
+    title: 'Generating Documentation',
+    slug,
+    description: `This documentation route is not published yet: /docs/${section}/${slug}`,
+    status: 'generating' as const
   }
 
   const isRestApi = section === 'api-reference' && slug === 'rest-api'

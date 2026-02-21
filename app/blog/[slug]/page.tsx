@@ -12,9 +12,8 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  // Use first post as example
-  const post = mockBlogPosts[0]
-  const relatedPosts = mockBlogPosts.slice(1, 4)
+  const post = mockBlogPosts.find((item) => item.slug === slug) ?? mockBlogPosts[0]
+  const relatedPosts = mockBlogPosts.filter((item) => item.slug !== post.slug).slice(0, 3)
   
   return (
     <div className="min-h-screen flex flex-col">

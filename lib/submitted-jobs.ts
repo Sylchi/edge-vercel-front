@@ -2,6 +2,7 @@ export interface SubmittedJob {
   id: string
   name: string
   createdAt: string
+  ownerPubkey?: string
   wasmFileName: string
   wasmSize: number
   inputFileName?: string
@@ -10,7 +11,7 @@ export interface SubmittedJob {
 
 const STORAGE_KEY = 'edgerun.submittedJobs'
 
-export function readSubmittedJobs(): SubmittedJob[] {
+export function readSubmittedJobs(ownerPubkey?: string | null): SubmittedJob[] {
   if (typeof window === 'undefined') {
     return []
   }
@@ -24,9 +25,13 @@ export function readSubmittedJobs(): SubmittedJob[] {
     if (!Array.isArray(parsed)) {
       return []
     }
-    return parsed
+    const jobs = parsed
       .filter((item) => item && typeof item.id === 'string')
       .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+    if (!ownerPubkey) {
+      return jobs
+    }
+    return jobs.filter((item) => item.ownerPubkey === ownerPubkey)
   } catch {
     return []
   }

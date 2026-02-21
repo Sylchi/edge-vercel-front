@@ -5,7 +5,7 @@ interface EmailLayoutProps {
 
 export default function EmailLayout({ children, preheader }: EmailLayoutProps) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,11 +55,11 @@ export default function EmailLayout({ children, preheader }: EmailLayoutProps) {
                             Deterministic WASM compute with Solana settlement
                           </p>
                           <p style={{ margin: 0 }}>
-                            <a href="#" style={{ color: '#a78bfa', textDecoration: 'none' }}>Unsubscribe</a>
+                            <a href="https://edgerun.io/unsubscribe" style={{ color: '#a78bfa', textDecoration: 'none' }}>Unsubscribe</a>
                             {' · '}
-                            <a href="#" style={{ color: '#a78bfa', textDecoration: 'none' }}>Notification Settings</a>
+                            <a href="https://edgerun.io/settings/notifications" style={{ color: '#a78bfa', textDecoration: 'none' }}>Notification Settings</a>
                             {' · '}
-                            <a href="#" style={{ color: '#a78bfa', textDecoration: 'none' }}>Privacy Policy</a>
+                            <a href="https://edgerun.io/legal/privacy" style={{ color: '#a78bfa', textDecoration: 'none' }}>Privacy Policy</a>
                           </p>
                         </td>
                       </tr>

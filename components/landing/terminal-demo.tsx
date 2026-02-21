@@ -255,7 +255,15 @@ export function TerminalDemo() {
           <div
             ref={terminalRef}
             className="h-[500px] overflow-y-auto p-4 font-mono text-sm"
+            role="button"
+            tabIndex={0}
             onClick={() => inputRef.current?.focus()}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                inputRef.current?.focus()
+              }
+            }}
           >
             {/* Welcome Message */}
             {history.length === 0 && currentInput === '' && (

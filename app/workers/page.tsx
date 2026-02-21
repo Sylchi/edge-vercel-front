@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { GeneratingIndicator } from '@/components/ui/generating-indicator'
 import { mockWorkers } from '@/lib/mock-data'
-import { formatPercentage, formatSOL, formatRelativeTime, getStatusColor } from '@/lib/utils/format'
+import { formatPercentage, formatSOL, getStatusColor } from '@/lib/utils/format'
 
 export default function WorkersPage() {
   const totalWorkers = 247

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -29,22 +30,21 @@ function deriveStatus(payload: JobStatusResponse): 'pending' | 'running' | 'comp
 export default function JobDetailsPage() {
   const params = useParams<{ id: string }>()
   const jobId = params.id
+  const { publicKey } = useWallet()
+  const walletAddress = publicKey?.toBase58() ?? null
 
   const [statusPayload, setStatusPayload] = useState<JobStatusResponse | null>(null)
-  const [jobName, setJobName] = useState('Compute Job')
-  const [createdAt, setCreatedAt] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const submittedJob = useMemo(() => {
+    return readSubmittedJobs(walletAddress).find((job) => job.id === jobId) ?? null
+  }, [jobId, walletAddress])
+  const jobName = submittedJob?.name ?? 'Compute Job'
+  const createdAt = submittedJob?.createdAt ?? null
 
   useEffect(() => {
     if (!jobId) {
       return
-    }
-
-    const submitted = readSubmittedJobs().find((job) => job.id === jobId)
-    if (submitted) {
-      setJobName(submitted.name)
-      setCreatedAt(submitted.createdAt)
     }
 
     let cancelled = false
@@ -65,8 +65,10 @@ export default function JobDetailsPage() {
       }
     }
 
-    refreshStatus()
-    const intervalId = window.setInterval(refreshStatus, 3000)
+    void refreshStatus()
+    const intervalId = window.setInterval(() => {
+      void refreshStatus()
+    }, 3000)
 
     return () => {
       cancelled = true

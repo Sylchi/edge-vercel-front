@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import brandTheme from '@/config/brand-theme.json'
+import { AppProviders } from '@/components/providers/app-providers'
 import './globals.css'
-
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: `${brandTheme.name} - Deterministic WASM Compute with Solana Settlement`,
@@ -48,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="font-sans antialiased">
-        {children}
+        <AppProviders>{children}</AppProviders>
         <Analytics />
       </body>
     </html>

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-02-21T15:24:27.819Z",
+  "generatedAt": "2026-02-21T16:14:10.988Z",
   "sourceFile": "crates/edgerun-scheduler/src/main.rs",
-  "sourceSha256": "63be093ecff6d1ac63e6f18847e0500d36c7ebb54315d470aca2fac579b8e8ac",
+  "sourceSha256": "88bbd39b99e748b98bca47e1b799c9afb628fa2014900163aa637ec693b7ec9b",
   "endpointCount": 10,
   "endpoints": [
     {
@@ -181,6 +181,18 @@
       },
       {
         "name": "assignment_worker_pubkey",
+        "type": "Option<String>"
+      },
+      {
+        "name": "client_pubkey",
+        "type": "Option<String>"
+      },
+      {
+        "name": "client_signed_at_unix_s",
+        "type": "Option<u64>"
+      },
+      {
+        "name": "client_signature",
         "type": "Option<String>"
       }
     ],

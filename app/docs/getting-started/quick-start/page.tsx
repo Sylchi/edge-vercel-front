@@ -58,8 +58,8 @@ export default function QuickStartPage() {
                 <h2 className="text-2xl font-bold">3. Run Frontend</h2>
                 <CodeBlock
                   code={`cd frontend
-pnpm install
-NEXT_PUBLIC_EDGERUN_SCHEDULER_URL=http://127.0.0.1:8080 pnpm dev`}
+bun install
+NEXT_PUBLIC_EDGERUN_SCHEDULER_URL=http://127.0.0.1:8080 bun run dev`}
                   language="bash"
                 />
                 <p className="text-sm text-muted-foreground">

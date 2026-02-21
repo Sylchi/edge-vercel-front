@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import { FooterLeadForm } from '@/components/footer-lead-form'
 
 const footerLinks = {
   product: [
@@ -29,8 +31,11 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-card mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-8">
+          <FooterLeadForm />
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {/* Product */}
           <div>
             <h3 className="font-semibold text-foreground mb-4">Product</h3>
             <ul className="space-y-3">
@@ -46,8 +51,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          
-          {/* Resources */}
+
           <div>
             <h3 className="font-semibold text-foreground mb-4">Resources</h3>
             <ul className="space-y-3">
@@ -63,8 +67,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          
-          {/* Legal */}
+
           <div>
             <h3 className="font-semibold text-foreground mb-4">Legal</h3>
             <ul className="space-y-3">
@@ -80,8 +83,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          
-          {/* Social */}
+
           <div>
             <h3 className="font-semibold text-foreground mb-4">Community</h3>
             <ul className="space-y-3">
@@ -100,18 +102,22 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        
-        {/* Bottom section */}
+
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <img src="/brand/edgerun-mark.svg" alt="Edgerun mark" className="w-6 h-6" />
+            <Image src="/brand/edgerun-mark.svg" alt="Edgerun mark" width={24} height={24} />
             <span className="font-bold">Edgerun</span>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {'© '}
-            {new Date().getFullYear()}
-            {' Edgerun. All rights reserved.'}
-          </p>
+          <div className="text-center md:text-right">
+            <p className="text-sm text-muted-foreground">
+              {'© '}
+              {new Date().getFullYear()}
+              {' Edgerun. All rights reserved.'}
+            </p>
+            <p className="text-xs text-muted-foreground font-mono mt-1">
+              Build {process.env.NEXT_PUBLIC_BUILD_VERSION ?? 'dev'}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

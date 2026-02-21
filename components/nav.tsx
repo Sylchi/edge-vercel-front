@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { WalletButton } from '@/components/solana/wallet-button'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -68,11 +69,9 @@ export function Nav() {
                 Dashboard
               </Button>
             </Link>
-            <Link href="/run">
-              <Button size="sm">
-                Run Job
-              </Button>
-            </Link>
+            <div className="hidden sm:block">
+              <WalletButton />
+            </div>
           </div>
         </div>
 
@@ -96,6 +95,9 @@ export function Nav() {
                   </Link>
                 )
               })}
+            </div>
+            <div className="mt-3">
+              <WalletButton />
             </div>
           </div>
         )}
