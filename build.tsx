@@ -23,6 +23,14 @@ const buildNumber =
   `${currentVersion}-${(process.env.GITHUB_SHA || 'local').slice(0, 8)}-${process.env.GITHUB_RUN_NUMBER || '0'}`
 const siteUrl = process.env.EDGERUN_SITE_URL || 'https://www.edgerun.tech'
 const siteDomain = process.env.EDGERUN_SITE_DOMAIN || 'www.edgerun.tech'
+const solanaCluster = process.env.SOLANA_CLUSTER || 'devnet'
+const rpcDefaultByCluster: Record<string, string> = {
+  localnet: 'http://127.0.0.1:8899',
+  devnet: 'https://api.devnet.solana.com',
+  'mainnet-beta': 'https://api.mainnet-beta.solana.com'
+}
+const solanaRpcUrl = process.env.SOLANA_RPC_URL || rpcDefaultByCluster[solanaCluster] || rpcDefaultByCluster.devnet
+const treasuryAccount = process.env.EDGERUN_TREASURY_ACCOUNT || ''
 
 const versions = Array.from(
   new Set(
@@ -172,6 +180,13 @@ function template(title: string, description: string, body: string): string {
         <p class="text-xs font-mono mt-2">${escapeHtml(marker)}</p>
       </footer>
     </div>
+    <script>
+      window.__EDGERUN_RPC_CONFIG = ${JSON.stringify({
+        cluster: solanaCluster,
+        rpcUrl: solanaRpcUrl,
+        treasuryAccount
+      })}
+    </script>
     <script type="module" src="/assets/client.js"></script>
   </body>
 </html>`
@@ -295,6 +310,15 @@ writePage(
         <p class="status-live mt-2 text-sm font-semibold">Live</p>
       </article>
       <article class="panel p-4">
+        <h2 class="text-lg font-semibold">On-chain Network Truth</h2>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div><dt class="inline visually-muted">Cluster:</dt> <dd class="inline" data-chain-field="cluster">loading...</dd></div>
+          <div><dt class="inline visually-muted">Current slot:</dt> <dd class="inline" data-chain-field="slot">loading...</dd></div>
+          <div><dt class="inline visually-muted">Block height:</dt> <dd class="inline" data-chain-field="blockHeight">loading...</dd></div>
+        </dl>
+        <p class="status-live mt-2 text-sm font-semibold">RPC-backed</p>
+      </article>
+      <article class="panel p-4">
         <h2 class="text-lg font-semibold">Advanced Scheduling</h2>
         <p class="visually-muted mt-2">Advanced orchestration and infra automation are rolling out incrementally.</p>
         <p class="status-generating mt-2 text-sm font-semibold" data-generating-label>Generating</p>
@@ -346,6 +370,11 @@ writePage(
       <p class="text-base md:text-lg">"I think compute will be the currency of the future. I think it'll be maybe the most precious commodity in the world."</p>
     </blockquote>
     <p class="text-sm visually-muted mt-2">Sam Altman, Lex Fridman Podcast source reference.</p>
+    <dl class="mt-4 space-y-1 text-sm">
+      <div><dt class="inline visually-muted">SOL supply:</dt> <dd class="inline" data-chain-field="supplySol">loading...</dd></div>
+      <div><dt class="inline visually-muted">Treasury balance:</dt> <dd class="inline" data-chain-field="treasurySol">loading...</dd></div>
+      <div><dt class="inline visually-muted">RPC endpoint:</dt> <dd class="inline" data-chain-field="rpcUrl">loading...</dd></div>
+    </dl>
   </section>`
 )
 
@@ -356,8 +385,13 @@ writePage(
   `<section class="panel p-4 md:p-6">
     <div class="grid-cards">
       <article class="panel p-4">
-        <h2 class="font-semibold">Throughput</h2>
-        <p class="visually-muted mt-2">Per-release job metrics and settlement lag surfaces.</p>
+        <h2 class="font-semibold">On-chain Throughput</h2>
+        <p class="visually-muted mt-2">Derived directly from Solana performance samples.</p>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div><dt class="inline visually-muted">Estimated TPS:</dt> <dd class="inline" data-chain-field="tps">loading...</dd></div>
+          <div><dt class="inline visually-muted">Epoch:</dt> <dd class="inline" data-chain-field="epoch">loading...</dd></div>
+        </dl>
+        <p class="status-live mt-2 text-sm font-semibold">RPC-backed</p>
       </article>
       <article class="panel p-4">
         <h2 class="font-semibold">Worker Health</h2>
@@ -508,7 +542,15 @@ writeFileSync(
 )
 
 writeFileSync(path.join(distRoot, 'versions.json'), JSON.stringify(versions, null, 2) + '\n', 'utf8')
-writeFileSync(path.join(distRoot, 'build-meta.json'), JSON.stringify({ version: currentVersion, buildNumber, siteUrl }, null, 2) + '\n', 'utf8')
+writeFileSync(
+  path.join(distRoot, 'build-meta.json'),
+  JSON.stringify(
+    { version: currentVersion, buildNumber, siteUrl, solanaCluster, solanaRpcUrl, treasuryAccount },
+    null,
+    2
+  ) + '\n',
+  'utf8'
+)
 if (siteDomain) writeFileSync(path.join(distRoot, 'CNAME'), `${siteDomain}\n`, 'utf8')
 
 const llmsBase = [
