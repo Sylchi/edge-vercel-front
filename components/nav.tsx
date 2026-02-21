@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
@@ -10,7 +11,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/run', label: 'Run Job' },
   { href: '/workers', label: 'Workers' },
-  { href: '/token', label: 'Token' },
+  { href: '/token', label: 'Economics' },
   { href: '/docs', label: 'Docs' },
   { href: '/blog', label: 'Blog' }
 ]
@@ -25,15 +26,15 @@ export function Nav() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img src="/brand/edgerun-mark.svg" alt="Edgerun mark" className="w-8 h-8" />
+            <Image src="/brand/edgerun-mark.svg" alt="Edgerun mark" width={32} height={32} />
             <span className="font-bold text-xl">Edgerun</span>
           </Link>
           
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href || 
-                (link.href !== '/' && pathname?.startsWith(link.href))
+              const isActive = pathname === link.href ||
+                (link.href !== '/' && pathname.startsWith(link.href))
               
               return (
                 <Link
@@ -79,7 +80,7 @@ export function Nav() {
           <div className="md:hidden pb-4">
             <div className="grid grid-cols-2 gap-2">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href))
+                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
                 return (
                   <Link
                     key={link.href}

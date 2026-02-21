@@ -40,7 +40,7 @@ export default function TokenPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
-              <h1 className="text-3xl sm:text-4xl font-bold">EDGE Token</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold">SOL Economics</h1>
               <Badge className="ml-2">Live</Badge>
             </div>
             
@@ -100,12 +100,12 @@ export default function TokenPage() {
             <div className="flex flex-wrap gap-3">
               <Button className="font-semibold grayscale opacity-60 cursor-not-allowed" disabled>
                 <Coins className="w-4 h-4 mr-2" />
-                Buy EDGE
+                Acquire SOL
                 <GeneratingIndicator className="text-[9px]" />
               </Button>
               <Button variant="outline" className="grayscale opacity-60 cursor-not-allowed" disabled>
                 <Users className="w-4 h-4 mr-2" />
-                Stake Tokens
+                Stake SOL
                 <GeneratingIndicator className="text-[9px]" />
               </Button>
               <Button variant="outline" className="grayscale opacity-60 cursor-not-allowed" disabled>
@@ -157,7 +157,7 @@ export default function TokenPage() {
                 <div className="text-center max-w-2xl mx-auto mb-8">
                   <h2 className="text-2xl font-bold mb-2">Staking Pools</h2>
                   <p className="text-muted-foreground">
-                    Stake EDGE tokens to earn rewards and participate in network security
+                    Stake SOL to earn rewards and participate in network security
                   </p>
                 </div>
 
@@ -189,7 +189,7 @@ export default function TokenPage() {
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Min Stake</span>
-                            <span className="font-mono">{formatSOL(pool.minStake)} EDGE</span>
+                            <span className="font-mono">{formatSOL(pool.minStake)}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Lock Period</span>
@@ -203,14 +203,14 @@ export default function TokenPage() {
                               <div className="flex justify-between">
                                 <span className="text-muted-foreground">Your Stake</span>
                                 <span className="font-mono font-semibold text-primary">
-                                  {formatSOL(pool.yourStake)} EDGE
+                                  {formatSOL(pool.yourStake)}
                                 </span>
                               </div>
                               {pool.rewards && (
                                 <div className="flex justify-between">
                                   <span className="text-muted-foreground">Pending Rewards</span>
                                   <span className="font-mono font-semibold text-green-500">
-                                    +{formatSOL(pool.rewards)} EDGE
+                                    +{formatSOL(pool.rewards)}
                                   </span>
                                 </div>
                               )}
@@ -231,15 +231,16 @@ export default function TokenPage() {
                 {selectedPool && (
                   <Card className="max-w-2xl mx-auto border-primary/50">
                     <CardHeader>
-                      <CardTitle>Stake Tokens</CardTitle>
+                      <CardTitle>Stake SOL</CardTitle>
                       <CardDescription>
                         Selected pool: {mockStakingPools.find(p => p.id === selectedPool)?.name}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Amount (EDGE)</label>
+                        <label htmlFor="stake-amount" className="text-sm font-medium mb-2 block">Amount (SOL)</label>
                         <Input 
+                          id="stake-amount"
                           type="number" 
                           placeholder="0.00"
                           value={stakeAmount}
@@ -247,7 +248,7 @@ export default function TokenPage() {
                           className="font-mono"
                         />
                         <p className="text-xs text-muted-foreground mt-1">
-                          Available: 1,234.56 EDGE
+                          Available: 1,234.56 SOL
                         </p>
                       </div>
                       <div className="p-4 bg-muted rounded-lg space-y-2 text-sm">
@@ -260,12 +261,12 @@ export default function TokenPage() {
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Annual Rewards</span>
                           <span className="font-mono font-semibold text-green-500">
-                            ~{formatSOL(parseFloat(stakeAmount || '0') * (mockStakingPools.find(p => p.id === selectedPool)?.apy || 0) / 100)} EDGE
+                            ~{formatSOL(parseFloat(stakeAmount || '0') * (mockStakingPools.find(p => p.id === selectedPool)?.apy || 0) / 100)}
                           </span>
                         </div>
                       </div>
                       <Button className="w-full grayscale opacity-60 cursor-not-allowed" disabled>
-                        Stake {stakeAmount || '0'} EDGE
+                        Stake {stakeAmount || '0'} SOL
                         <GeneratingIndicator className="text-[9px]" />
                       </Button>
                     </CardContent>
@@ -278,7 +279,7 @@ export default function TokenPage() {
                 <div className="text-center max-w-2xl mx-auto mb-8">
                   <h2 className="text-2xl font-bold mb-2">Transaction History</h2>
                   <p className="text-muted-foreground">
-                    All token transactions including stakes, rewards, and payments
+                    All SOL transactions including stakes, rewards, and payments
                   </p>
                 </div>
 
@@ -358,7 +359,7 @@ export default function TokenPage() {
                     <CardTitle className="flex items-center justify-between">
                       <span>Total Claimable</span>
                       <span className="text-3xl font-mono text-primary">
-                        {formatSOL(totalRewardsClaimable)} EDGE
+                        {formatSOL(totalRewardsClaimable)}
                       </span>
                     </CardTitle>
                     <CardDescription>
@@ -394,7 +395,7 @@ export default function TokenPage() {
                       <CardContent className="space-y-3">
                         <div>
                           <p className="text-2xl font-mono font-bold">
-                            {formatSOL(reward.amount)} EDGE
+                            {formatSOL(reward.amount)}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Earned: {reward.earned}
@@ -426,7 +427,7 @@ export default function TokenPage() {
                 <div className="text-center max-w-2xl mx-auto mb-8">
                   <h2 className="text-2xl font-bold mb-2">Dispute Resolution</h2>
                   <p className="text-muted-foreground">
-                    Community-driven dispute resolution with token-weighted voting
+                    Community-driven dispute resolution with stake-weighted voting
                   </p>
                 </div>
 
@@ -460,7 +461,7 @@ export default function TokenPage() {
                           <div className="text-right">
                             <p className="text-sm text-muted-foreground">Stake at Risk</p>
                             <p className="text-xl font-mono font-bold text-destructive">
-                              {formatSOL(dispute.amount)} EDGE
+                              {formatSOL(dispute.amount)}
                             </p>
                           </div>
                         </div>
