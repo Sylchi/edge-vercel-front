@@ -2,24 +2,30 @@ import Link from 'next/link'
 import { Nav } from '@/components/nav'
 import { Footer } from '@/components/footer'
 import { DocsSidebar } from '@/components/docs/docs-sidebar'
+import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { GeneratingIndicator } from '@/components/ui/generating-indicator'
+import { docsSections } from '@/lib/docs-content'
 
 const quickLinks = [
   {
     title: 'Quick Start',
-    description: 'Get up and running with Edgerun in 5 minutes',
-    href: '/docs/getting-started/quick-start'
+    description: 'Get up and running with the implemented scheduler flow',
+    href: '/docs/getting-started/quick-start',
+    status: 'live' as const
   },
   {
     title: 'Core Concepts',
-    description: 'Learn about jobs, workers, and consensus',
-    href: '/docs/core-concepts/jobs'
+    description: 'Docs in progress for jobs, workers, and consensus internals',
+    href: '/docs/core-concepts/jobs',
+    status: 'generating' as const
   },
   {
     title: 'API Reference',
-    description: 'Complete REST API documentation',
-    href: '/docs/api-reference/rest-api'
+    description: 'Implemented scheduler endpoints and examples',
+    href: '/docs/api-reference/rest-api',
+    status: 'live' as const
   }
 ]
 
@@ -49,7 +55,16 @@ export default function DocsHomePage() {
                 <Link key={link.href} href={link.href}>
                   <Card className="h-full hover:border-primary/50 transition-colors cursor-pointer">
                     <CardHeader>
-                      <CardTitle className="text-lg">{link.title}</CardTitle>
+                      <CardTitle className="text-lg flex items-center justify-between gap-2">
+                        <span>{link.title}</span>
+                        {link.status === 'live' ? (
+                          <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+                            Live
+                          </Badge>
+                        ) : (
+                          <GeneratingIndicator />
+                        )}
+                      </CardTitle>
                       <CardDescription>{link.description}</CardDescription>
                     </CardHeader>
                   </Card>
@@ -64,7 +79,7 @@ export default function DocsHomePage() {
                 <p className="text-muted-foreground mb-6">
                   {'New to Edgerun? Start here to learn the basics and run your first job.'}
                 </p>
-                <Link href="/docs/getting-started/introduction">
+                <Link href="/docs/getting-started/quick-start">
                   <Button>
                     Start Learning
                   </Button>
@@ -75,35 +90,27 @@ export default function DocsHomePage() {
               <div className="pt-8">
                 <h3 className="text-xl font-semibold mb-4">Popular Topics</h3>
                 <div className="space-y-3">
-                  <Link
-                    href="/docs/getting-started/quick-start"
-                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
-                  >
-                    <p className="font-semibold mb-1">Quick Start Guide</p>
-                    <p className="text-sm text-muted-foreground">
-                      {'Install the SDK, compile WASM, and run your first job'}
-                    </p>
-                  </Link>
-                  
-                  <Link
-                    href="/docs/core-concepts/jobs"
-                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
-                  >
-                    <p className="font-semibold mb-1">Understanding Jobs</p>
-                    <p className="text-sm text-muted-foreground">
-                      {'Learn how compute jobs work, from submission to settlement'}
-                    </p>
-                  </Link>
-                  
-                  <Link
-                    href="/docs/core-concepts/workers"
-                    className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
-                  >
-                    <p className="font-semibold mb-1">Worker Nodes</p>
-                    <p className="text-sm text-muted-foreground">
-                      {'How to run a worker node and earn rewards'}
-                    </p>
-                  </Link>
+                  {docsSections.flatMap((section) =>
+                    section.pages.map((page) => (
+                      <Link
+                        key={`${section.slug}/${page.slug}`}
+                        href={`/docs/${section.slug}/${page.slug}`}
+                        className="block p-4 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <p className="font-semibold">{page.title}</p>
+                          {page.status === 'live' ? (
+                            <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+                              Live
+                            </Badge>
+                          ) : (
+                            <GeneratingIndicator />
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground">{page.description}</p>
+                      </Link>
+                    ))
+                  )}
                 </div>
               </div>
             </div>

@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { mockDocsStructure } from '@/lib/mock-data'
+import { Badge } from '@/components/ui/badge'
+import { GeneratingIndicator } from '@/components/ui/generating-indicator'
+import { docsSections } from '@/lib/docs-content'
 
 export function DocsSidebar() {
   const pathname = usePathname()
@@ -11,7 +13,7 @@ export function DocsSidebar() {
     <aside className="w-64 flex-shrink-0 border-r border-border bg-card">
       <div className="sticky top-16 p-6 h-[calc(100vh-4rem)] overflow-y-auto">
         <nav className="space-y-6">
-          {mockDocsStructure.map((section) => (
+          {docsSections.map((section) => (
             <div key={section.slug}>
               <h3 className="font-semibold text-sm mb-3">{section.title}</h3>
               <ul className="space-y-2">
@@ -29,7 +31,16 @@ export function DocsSidebar() {
                             : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                         }`}
                       >
-                        {page.title}
+                        <span className="flex items-center justify-between gap-2">
+                          <span>{page.title}</span>
+                          {page.status === 'live' ? (
+                            <Badge variant="secondary" className="text-[10px] uppercase tracking-wide">
+                              Live
+                            </Badge>
+                          ) : (
+                            <GeneratingIndicator />
+                          )}
+                        </span>
                       </Link>
                     </li>
                   )
