@@ -13,17 +13,15 @@ export function HeroSection() {
           </div>
           
           {/* Heading */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-balance">
-            Verifiable Compute
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-balance leading-tight">
+            Dependable Compute.
             <br />
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Powered by WASM
-            </span>
+            Financially Enforced.
           </h1>
           
           {/* Description */}
           <p className="text-xl md:text-2xl text-muted-foreground text-balance max-w-3xl mx-auto leading-relaxed">
-            {'Deterministic execution with cryptographic proofs. Run WASM workloads across distributed workers and settle results on Solana.'}
+            Security by stake. Pricing by competition.
           </p>
           
           {/* CTAs */}

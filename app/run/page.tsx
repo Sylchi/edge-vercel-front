@@ -33,12 +33,12 @@ export default function RunJobPage() {
       <Nav />
       
       <main className="flex-1 bg-background">
-        {/* Header */}
-        <section className="border-b border-border bg-card">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="text-4xl font-bold mb-4">Run Compute Job</h1>
-            <p className="text-lg text-muted-foreground max-w-3xl">
-              {'Submit a WASM module for deterministic execution across distributed workers'}
+        {/* Header - Cold, Minimal */}
+        <section className="border-b border-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 className="text-3xl font-bold mb-2">Execute Job</h1>
+            <p className="text-sm text-muted-foreground font-mono">
+              Deterministic WASM execution. Consensus-based verification.
             </p>
           </div>
         </section>
@@ -177,26 +177,26 @@ export default function RunJobPage() {
                   </CardContent>
                 </Card>
                 
-                <Card className="border-accent/50 bg-accent/5">
+                <Card className="border-border">
                   <CardHeader>
-                    <CardTitle className="text-base">How It Works</CardTitle>
+                    <CardTitle className="text-base">Execution Flow</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-muted-foreground">
+                  <CardContent className="space-y-3 text-sm text-muted-foreground font-mono">
                     <div className="flex gap-3">
-                      <span className="text-accent">1.</span>
-                      <p>Your WASM module is distributed to selected workers</p>
+                      <span className="text-foreground">1.</span>
+                      <p>WASM distributed to workers</p>
                     </div>
                     <div className="flex gap-3">
-                      <span className="text-accent">2.</span>
-                      <p>Workers execute deterministically in parallel</p>
+                      <span className="text-foreground">2.</span>
+                      <p>Parallel deterministic execution</p>
                     </div>
                     <div className="flex gap-3">
-                      <span className="text-accent">3.</span>
-                      <p>Output hashes are compared for consensus</p>
+                      <span className="text-foreground">3.</span>
+                      <p>Output hash consensus</p>
                     </div>
                     <div className="flex gap-3">
-                      <span className="text-accent">4.</span>
-                      <p>Results are settled on Solana with cryptographic proof</p>
+                      <span className="text-foreground">4.</span>
+                      <p>Settlement with proof</p>
                     </div>
                   </CardContent>
                 </Card>

@@ -18,76 +18,98 @@ export default function WorkersPage() {
       
       <main className="flex-1 bg-background">
         {/* Hero */}
-        <section className="bg-background py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-background py-20 relative overflow-hidden">
+          {/* Subtle background animation hint */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-50" />
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 mb-6">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="text-xs font-semibold text-primary">{activeWorkers} WORKERS ACTIVE NOW</span>
+              </div>
+              
               <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">
-                Become a Worker Node
+                Stake Capital. Execute Jobs. Earn Fees.
               </h1>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                {'Earn rewards by executing WASM compute jobs. Stake SOL, maintain high uptime, and get paid for verified computation.'}
+                {'Workers compete for jobs. Correct results earn fees. Incorrect results lose stake. Market forces determine pricing.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg">
+                <Button size="lg" className="font-semibold">
                   Join as Worker
                 </Button>
                 <Button size="lg" variant="outline">
-                  View Documentation
+                  Economics Documentation
                 </Button>
               </div>
             </div>
           </div>
         </section>
         
-        {/* Network Stats */}
+        {/* Network Stats - Economic Engine Feeling */}
         <section className="py-12 bg-card/50 border-y border-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold mb-8">Network Statistics</h2>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold">Live Network Activity</h2>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <span>Real-time</span>
+              </div>
+            </div>
             <div className="grid md:grid-cols-4 gap-6">
-              <Card>
+              <Card className="border-l-4 border-l-primary">
                 <CardHeader>
                   <p className="text-sm text-muted-foreground">Total Workers</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold">{totalWorkers}</p>
+                  <p className="text-xs text-green-500 mt-1">↑ 12 this week</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="border-l-4 border-l-accent">
                 <CardHeader>
                   <p className="text-sm text-muted-foreground">Active Now</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold text-primary">{activeWorkers}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{formatPercentage((activeWorkers/totalWorkers)*100)} online</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="border-l-4 border-l-purple-500">
                 <CardHeader>
                   <p className="text-sm text-muted-foreground">Network Uptime</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold">{formatPercentage(networkUptime)}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Last 30 days</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="border-l-4 border-l-yellow-500">
                 <CardHeader>
                   <p className="text-sm text-muted-foreground">Total Stake</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold">{formatSOL(totalStake, 0)}</p>
+                  <p className="text-xs text-green-500 mt-1">↑ {formatSOL(450, 0)} today</p>
                 </CardContent>
               </Card>
             </div>
           </div>
         </section>
         
-        {/* Requirements */}
+        {/* Requirements - Economic Focus */}
         <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold mb-8">Worker Requirements</h2>
+            <h2 className="text-2xl font-bold mb-2">Worker Requirements</h2>
+            <p className="text-muted-foreground mb-8">Entry barriers exist to ensure quality. Competition rewards the best.</p>
             <div className="grid md:grid-cols-3 gap-6">
-              <Card>
+              <Card className="hover:border-primary/50 transition-colors">
                 <CardHeader>
-                  <CardTitle>Hardware</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>Hardware</span>
+                    <Badge variant="secondary" className="text-xs">Required</Badge>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
                   <p>• 8+ vCPU cores</p>
@@ -96,20 +118,26 @@ export default function WorkersPage() {
                   <p>• 1 Gbps network</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="hover:border-primary/50 transition-colors border-primary/30">
                 <CardHeader>
-                  <CardTitle>Stake</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>Stake</span>
+                    <Badge className="text-xs">Financial</Badge>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Minimum: 50 SOL</p>
+                  <p className="text-foreground font-semibold">• Min: 50 SOL (~$7,500)</p>
                   <p>• Recommended: 100 SOL</p>
-                  <p>• Higher stake = more jobs</p>
-                  <p>• Slashing for misbehavior</p>
+                  <p className="text-green-500">• Higher stake → More jobs</p>
+                  <p className="text-destructive">• Wrong outputs → Slashed</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="hover:border-primary/50 transition-colors">
                 <CardHeader>
-                  <CardTitle>Software</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span>Software</span>
+                    <Badge variant="secondary" className="text-xs">Required</Badge>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm text-muted-foreground">
                   <p>• Ubuntu 22.04+ or similar</p>

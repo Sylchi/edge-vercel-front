@@ -2,34 +2,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 const features = [
   {
-    title: 'Deterministic Execution',
-    description: 'WASM modules execute identically across all workers, ensuring verifiable consensus without trust assumptions',
+    title: 'Deterministic WASM',
+    description: 'Multiple workers execute identical WASM bytecode. Same input always produces same output. Consensus proves correctness.',
     icon: '⚡'
   },
   {
-    title: 'Cryptographic Proofs',
-    description: 'Every execution generates cryptographic proofs that are settled on-chain for permanent verification',
-    icon: '🔐'
-  },
-  {
-    title: 'Solana Settlement',
-    description: 'Fast, low-cost settlement layer leveraging Solana for proof storage and payment distribution',
-    icon: '⛓️'
-  },
-  {
-    title: 'Worker Incentives',
-    description: 'Stake-based economic model with slashing protection ensures reliable execution and network security',
+    title: 'Staking Enforces Quality',
+    description: 'Workers stake capital to participate. Incorrect outputs result in slashed stake. Financial consequences ensure honest execution.',
     icon: '💎'
   },
   {
-    title: 'Developer Friendly',
-    description: 'Simple SDK and CLI tools. Compile any language to WASM and run it in seconds',
-    icon: '🛠️'
+    title: 'Market-Driven Pricing',
+    description: 'Workers compete for jobs. Supply and demand determine fees. No fixed pricing. Capital flows to the most efficient.',
+    icon: '📊'
   },
   {
-    title: 'Global Network',
-    description: 'Distributed worker nodes across multiple regions provide redundancy and low-latency execution',
-    icon: '🌍'
+    title: 'Cryptographic Settlement',
+    description: 'Execution proofs settle on Solana. Immutable record of consensus. Payments distributed automatically on-chain.',
+    icon: '🔐'
+  },
+  {
+    title: 'Slashing Protection',
+    description: 'Redundant execution prevents single points of failure. Byzantine fault tolerance. Malicious workers lose stake.',
+    icon: '⚔️'
+  },
+  {
+    title: 'Universal WASM',
+    description: 'Compile from any language to WASM. Rust, C, Go, AssemblyScript. Run anything deterministically.',
+    icon: '🛠️'
   }
 ]
 
@@ -40,10 +40,10 @@ export function FeaturesSection() {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Built for Verifiable Computation
+            How It Works
           </h2>
           <p className="text-lg text-muted-foreground text-balance">
-            {'Edgerun combines deterministic WASM execution with blockchain settlement to create trustless, verifiable compute infrastructure.'}
+            Redundant execution by staked workers. Incorrect results lose money. Competitive workers set the price.
           </p>
         </div>
         
