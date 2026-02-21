@@ -3,6 +3,7 @@ import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { GeneratingIndicator } from '@/components/ui/generating-indicator'
 import { mockWorkers } from '@/lib/mock-data'
 import { formatPercentage, formatSOL, formatRelativeTime, getStatusColor } from '@/lib/utils/format'
 
@@ -36,11 +37,13 @@ export default function WorkersPage() {
                 {'Workers compete for jobs. Correct results earn fees. Incorrect results lose stake. Market forces determine pricing.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="font-semibold">
+                <Button size="lg" className="font-semibold grayscale opacity-60 cursor-not-allowed" disabled>
                   Join as Worker
+                  <GeneratingIndicator className="text-[9px]" />
                 </Button>
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="grayscale opacity-60 cursor-not-allowed" disabled>
                   Economics Documentation
+                  <GeneratingIndicator className="text-[9px]" />
                 </Button>
               </div>
             </div>
@@ -181,8 +184,9 @@ export default function WorkersPage() {
                   </div>
                 </div>
                 
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto grayscale opacity-60 cursor-not-allowed" disabled>
                   View Full Documentation
+                  <GeneratingIndicator className="text-[9px]" />
                 </Button>
               </CardContent>
             </Card>

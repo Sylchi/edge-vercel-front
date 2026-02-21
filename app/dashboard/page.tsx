@@ -7,6 +7,7 @@ import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { GeneratingIndicator } from '@/components/ui/generating-indicator'
 import { mockJobs, mockDashboardStats } from '@/lib/mock-data'
 import { fetchSchedulerJobStatus } from '@/lib/scheduler-client'
 import { readSubmittedJobs } from '@/lib/submitted-jobs'
@@ -133,7 +134,10 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
                 <p className="text-muted-foreground">Monitor your compute jobs and spending</p>
               </div>
-              <Button>Connect Wallet</Button>
+              <Button disabled className="grayscale opacity-60 cursor-not-allowed">
+                Connect Wallet
+                <GeneratingIndicator className="text-[9px]" />
+              </Button>
             </div>
 
             <Card className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-primary/20">

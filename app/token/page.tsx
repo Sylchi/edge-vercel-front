@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { GeneratingIndicator } from '@/components/ui/generating-indicator'
 import { 
   mockTokenStats, 
   mockStakingPools, 
@@ -97,17 +98,20 @@ export default function TokenPage() {
 
             {/* Quick Actions */}
             <div className="flex flex-wrap gap-3">
-              <Button className="font-semibold">
+              <Button className="font-semibold grayscale opacity-60 cursor-not-allowed" disabled>
                 <Coins className="w-4 h-4 mr-2" />
                 Buy EDGE
+                <GeneratingIndicator className="text-[9px]" />
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="grayscale opacity-60 cursor-not-allowed" disabled>
                 <Users className="w-4 h-4 mr-2" />
                 Stake Tokens
+                <GeneratingIndicator className="text-[9px]" />
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="grayscale opacity-60 cursor-not-allowed" disabled>
                 <Shield className="w-4 h-4 mr-2" />
                 View Governance
+                <GeneratingIndicator className="text-[9px]" />
               </Button>
             </div>
 
@@ -214,8 +218,9 @@ export default function TokenPage() {
                           </div>
                         )}
 
-                        <Button className="w-full" variant={pool.yourStake ? "outline" : "default"}>
+                        <Button className="w-full grayscale opacity-60 cursor-not-allowed" variant={pool.yourStake ? "outline" : "default"} disabled>
                           {pool.yourStake ? 'Manage Stake' : 'Stake Now'}
+                          <GeneratingIndicator className="text-[9px]" />
                         </Button>
                       </CardContent>
                     </Card>
@@ -259,8 +264,9 @@ export default function TokenPage() {
                           </span>
                         </div>
                       </div>
-                      <Button className="w-full" disabled={!stakeAmount}>
+                      <Button className="w-full grayscale opacity-60 cursor-not-allowed" disabled>
                         Stake {stakeAmount || '0'} EDGE
+                        <GeneratingIndicator className="text-[9px]" />
                       </Button>
                     </CardContent>
                   </Card>
@@ -360,9 +366,10 @@ export default function TokenPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full" size="lg">
+                    <Button className="w-full grayscale opacity-60 cursor-not-allowed" size="lg" disabled>
                       <Coins className="w-4 h-4 mr-2" />
                       Claim All Rewards
+                      <GeneratingIndicator className="text-[9px]" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -399,8 +406,9 @@ export default function TokenPage() {
                             Claimed on {formatDate(reward.claimedAt!)}
                           </div>
                         ) : reward.claimable ? (
-                          <Button className="w-full" size="sm">
+                          <Button className="w-full grayscale opacity-60 cursor-not-allowed" size="sm" disabled>
                             Claim Reward
+                            <GeneratingIndicator className="text-[9px]" />
                           </Button>
                         ) : (
                           <Button className="w-full" size="sm" variant="outline" disabled>
@@ -501,13 +509,15 @@ export default function TokenPage() {
 
                         {dispute.status === 'voting' && (
                           <div className="flex gap-2">
-                            <Button className="flex-1" variant="default">
+                            <Button className="flex-1 grayscale opacity-60 cursor-not-allowed" variant="default" disabled>
                               <Vote className="w-4 h-4 mr-2" />
                               Vote For
+                              <GeneratingIndicator className="text-[9px]" />
                             </Button>
-                            <Button className="flex-1" variant="outline">
+                            <Button className="flex-1 grayscale opacity-60 cursor-not-allowed" variant="outline" disabled>
                               <Vote className="w-4 h-4 mr-2" />
                               Vote Against
+                              <GeneratingIndicator className="text-[9px]" />
                             </Button>
                           </div>
                         )}
