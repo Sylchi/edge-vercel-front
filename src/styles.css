@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #050910;
+  --bg-alt: #0d1729;
+  --panel: #111d33;
+  --text: #e2ebff;
+  --muted: #9bb2d6;
+  --line: #2b3958;
+  --brand: #2ec5ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 380px at 10% -5%, #0d3b70 0%, transparent 60%),
+    radial-gradient(900px 380px at 90% -10%, #0f766e 0%, transparent 55%),
+    linear-gradient(170deg, var(--bg) 0%, var(--bg-alt) 100%);
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: #9fe8ff;
+}
+
+a,
+button,
+select,
+summary,
+[role="button"] {
+  cursor: pointer;
+}
+
+.shell {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding: 1.5rem;
+  }
+}
+
+.panel {
+  background: color-mix(in oklab, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.navlink {
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.navlink:hover,
+.navlink:focus-visible {
+  border-color: var(--line);
+  background: color-mix(in oklab, var(--panel) 92%, black);
+  outline: none;
+}
+
+.grid-cards {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.status-live {
+  color: #9ef1b6;
+}
+
+.status-generating {
+  color: #ffd77f;
+}
+
+.docs-content {
+  line-height: 1.65;
+}
+
+.docs-content h1,
+.docs-content h2,
+.docs-content h3,
+.docs-content p,
+.docs-content ul,
+.docs-content ol,
+.docs-content pre,
+.docs-content blockquote {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.docs-content pre {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.docs-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+blockquote {
+  margin: 0;
+}
+
+.visually-muted {
+  color: var(--muted);
+}
