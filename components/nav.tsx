@@ -25,7 +25,7 @@ export function Nav() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded" />
+            <img src="/brand/edgerun-mark.svg" alt="Edgerun mark" className="w-8 h-8" />
             <span className="font-bold text-xl">Edgerun</span>
           </Link>
           

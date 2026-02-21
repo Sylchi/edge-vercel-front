@@ -104,7 +104,7 @@ export function Footer() {
         {/* Bottom section */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-primary to-accent rounded" />
+            <img src="/brand/edgerun-mark.svg" alt="Edgerun mark" className="w-6 h-6" />
             <span className="font-bold">Edgerun</span>
           </div>
           <p className="text-sm text-muted-foreground">

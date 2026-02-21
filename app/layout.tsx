@@ -1,16 +1,20 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import brandTheme from '@/config/brand-theme.json'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Edgerun - Deterministic WASM Compute with Solana Settlement',
-  description: 'Verifiable compute platform with deterministic WASM execution and cryptographic proof settlement on Solana',
+  title: `${brandTheme.name} - Deterministic WASM Compute with Solana Settlement`,
+  description: brandTheme.description,
+  applicationName: brandTheme.applicationName,
   generator: 'v0.app',
+  manifest: '/manifest.webmanifest',
   icons: {
+    shortcut: '/favicon.ico',
     icon: [
       {
         url: '/icon-light-32x32.png',
@@ -27,6 +31,13 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: brandTheme.colors.lightBackground },
+    { media: '(prefers-color-scheme: dark)', color: brandTheme.colors.darkBackground }
+  ]
 }
 
 export default function RootLayout({

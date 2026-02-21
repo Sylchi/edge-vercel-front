@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "brand:generate": "node scripts/generate-brand-assets.mjs",
     "docs:generate": "node scripts/generate-scheduler-docs.mjs",
-    "predev": "pnpm docs:generate",
-    "prebuild": "pnpm docs:generate",
+    "predev": "pnpm brand:generate && pnpm docs:generate",
+    "prebuild": "pnpm brand:generate && pnpm docs:generate",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
