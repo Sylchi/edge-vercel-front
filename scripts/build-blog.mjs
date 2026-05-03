@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -148,6 +148,7 @@ function writePage(relative, html) {
 }
 
 function walkHtmlFiles(dir) {
+  if (!existsSync(dir)) return []
   const out = []
   for (const entry of readdirSync(dir)) {
     const full = path.join(dir, entry)
@@ -161,19 +162,31 @@ function walkHtmlFiles(dir) {
 function patchNav() {
   for (const file of walkHtmlFiles(dist)) {
     let html = readFileSync(file, 'utf8')
-    if (!html.includes('href="/blog/"')) {
-      html = html.replace(
-        '<a class="navlink" href="/docs/">Docs</a>',
-        '<a class="navlink" href="/blog/">Blog</a>\n<a class="navlink" href="/docs/">Docs</a>'
-      )
-    }
-    writeFileSync(file, html, 'utf8')
+    if (html.includes('href="/blog/"')) continue
+    const patched = html.replace(
+      '<a class="navlink" href="/docs/">Docs</a>',
+      '<a class="navlink" href="/blog/">Blog</a>\n<a class="navlink" href="/docs/">Docs</a>'
+    )
+    if (patched !== html) writeFileSync(file, patched, 'utf8')
   }
 }
 
 function patchSitemap() {
   const sitemapPath = path.join(dist, 'sitemap.xml')
+  if (!existsSync(sitemapPath)) {
+    const urls = ['/', '/blog/', ...posts.map((post) => `/blog/${post.slug}/`)]
+    writeFileSync(
+      sitemapPath,
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
+        .map((href) => `  <url><loc>${siteUrl}${href}</loc></url>`)
+        .join('\n')}\n</urlset>\n`,
+      'utf8'
+    )
+    return
+  }
+
   let sitemap = readFileSync(sitemapPath, 'utf8')
+  if (!sitemap.includes('</urlset>')) return
   for (const href of ['/blog/', ...posts.map((post) => `/blog/${post.slug}/`)]) {
     const loc = `${siteUrl}${href}`
     if (!sitemap.includes(loc)) {
