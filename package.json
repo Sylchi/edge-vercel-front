@@ -8,7 +8,7 @@
     "clean": "rm -rf dist",
     "brand:generate": "bun scripts/generate-brand-assets.mjs",
     "docs:generate": "bun scripts/generate-scheduler-docs.mjs",
-    "blog:generate": "node scripts/build-blog.mjs",
+    "blog:generate": "bun scripts/build-blog.mjs",
     "build:css": "tailwindcss -i ./src/styles.css -o ./dist/assets/styles.css --minify",
     "build:js": "esbuild ./src/client.ts --bundle=false --format=esm --target=es2022 --outfile=./dist/assets/client.js",
     "build:html": "bun ./build.tsx",
