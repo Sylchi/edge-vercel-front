@@ -8,10 +8,11 @@
     "clean": "rm -rf dist",
     "brand:generate": "bun scripts/generate-brand-assets.mjs",
     "docs:generate": "bun scripts/generate-scheduler-docs.mjs",
+    "blog:generate": "node scripts/build-blog.mjs",
     "build:css": "tailwindcss -i ./src/styles.css -o ./dist/assets/styles.css --minify",
     "build:js": "esbuild ./src/client.ts --bundle=false --format=esm --target=es2022 --outfile=./dist/assets/client.js",
     "build:html": "bun ./build.tsx",
-    "build": "bun run brand:generate && bun run docs:generate && bun run clean && mkdir -p dist/assets && bun run build:css && bun run build:js && bun run build:html",
+    "build": "bun run brand:generate && bun run docs:generate && bun run clean && mkdir -p dist/assets && bun run build:css && bun run build:js && bun run build:html && bun run blog:generate",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
     "check": "bun run typecheck && bun run lint"
